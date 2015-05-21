@@ -26,6 +26,7 @@ import gov.va.oia.terminology.converters.sharedUtils.propertyTypes.Property;
 import gov.va.oia.terminology.converters.sharedUtils.propertyTypes.PropertyType;
 import gov.va.oia.terminology.converters.sharedUtils.propertyTypes.ValuePropertyPair;
 import gov.va.oia.terminology.converters.sharedUtils.stats.ConverterUUID;
+import gov.vha.isaac.metadata.source.IsaacMetadataAuxiliaryBinding;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -42,12 +43,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 import java.util.UUID;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.ihtsdo.otf.tcc.api.coordinate.Status;
-import org.ihtsdo.otf.tcc.api.metadata.binding.Taxonomies;
 import org.ihtsdo.otf.tcc.dto.TtkConceptChronicle;
 import org.ihtsdo.otf.tcc.dto.component.relationship.TtkRelationshipChronicle;
 import com.apelon.akcds.loinc.propertyTypes.PT_Annotations;
@@ -69,8 +69,6 @@ import com.apelon.akcds.loinc.propertyTypes.PT_SkipOther;
 @Mojo( name = "convert-loinc-to-jbin", defaultPhase = LifecyclePhase.PROCESS_SOURCES )
 public class LoincToEConcepts extends ConverterBaseMojo
 {
-	private final String loincNamespaceBaseSeed_ = "gov.va.med.term.loinc";
-
 	// Want a specific handle to this - adhoc usage.
 	private PT_ContentVersion contentVersion_;
 
@@ -200,7 +198,7 @@ public class LoincToEConcepts extends ConverterBaseMojo
 			
 			File binaryOutputFile = new File(outputDirectory, "loincEConcepts.jbin");
 			dos_ = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(binaryOutputFile)));
-			conceptUtility_ = new EConceptUtility(loincNamespaceBaseSeed_, "LOINC Path", dos_, releaseDate.getTime());
+			conceptUtility_ = new EConceptUtility(IsaacMetadataAuxiliaryBinding.LOINC.getPrimodialUuid(), dos_, releaseDate.getTime());
 			
 			contentVersion_ = new PT_ContentVersion();
 			pt_SkipAxis_ = new PT_SkipAxis();
@@ -279,9 +277,8 @@ public class LoincToEConcepts extends ConverterBaseMojo
 			ConsoleUtil.println("Loading Metadata");
 
 			// Set up a meta-data root concept
-			UUID archRoot = Taxonomies.WB_AUX.getUuids()[0];
 			UUID metaDataRoot = ConverterUUID.createNamespaceUUIDFromString("metadata");
-			conceptUtility_.createAndStoreMetaDataConcept(metaDataRoot, "LOINC Metadata", archRoot, null, dos_);
+			conceptUtility_.createAndStoreMetaDataConcept(metaDataRoot, "LOINC Metadata", IsaacMetadataAuxiliaryBinding.ISAAC_ROOT.getPrimodialUuid(), null, dos_);
 
 			conceptUtility_.loadMetaDataItems(propertyTypes_, metaDataRoot, dos_);
 
@@ -335,7 +332,7 @@ public class LoincToEConcepts extends ConverterBaseMojo
 			conceptUtility_.clearLoadStats();
 
 			// Root
-			TtkConceptChronicle rootConcept = conceptUtility_.createConcept("LOINC");
+			TtkConceptChronicle rootConcept = conceptUtility_.createConcept("LOINC", IsaacMetadataAuxiliaryBinding.ISAAC_ROOT.getPrimodialUuid());
 			conceptUtility_.addDescription(rootConcept, "LOINC", DescriptionType.SYNONYM, true, null, null, Status.ACTIVE);
 			conceptUtility_.addDescription(rootConcept, "Logical Observation Identifiers Names and Codes", DescriptionType.SYNONYM, false, null, null, Status.ACTIVE);
 			ConsoleUtil.println("Root concept FSN is 'LOINC' and the UUID is " + rootConcept.getPrimordialUuid());

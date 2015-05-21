@@ -2,15 +2,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>gov.va.oia.terminology.source.loinc</groupId>
-	<artifactId>loinc-src-data</artifactId>
+	<groupId>gov.vha.isaac.terminology.source</groupId>
+	<artifactId>term-convert-loinc-src-data</artifactId>
 	<version>2.48</version>
 	<packaging>pom</packaging>
 
 	<name>LOINC Source Packager</name>
 	
 	<scm>
-		<url>https://csfe.aceworkspace.net/gerrit/gitweb?p=term-convert-loinc.git;tflink=projects.informatics_architecture/scm.term_convert_loinc</url>
+		<url>https://github.com/Apelon-VA/va-term-convert-loinc.git</url>
 	</scm>
 	
 	<licenses>

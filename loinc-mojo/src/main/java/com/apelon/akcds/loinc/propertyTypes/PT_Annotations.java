@@ -30,7 +30,7 @@ public class PT_Annotations extends BPT_Annotations
 	public PT_Annotations(List<String> skipList)
 	{
 		super();
-		super.skipList = skipList;
+		super.skipList_ = skipList;
 		
 		addProperty("DT_LAST_CH", 0, 1);  //replaced with DATE_LAST_CHANGED in 2.38
 		addProperty("DATE_LAST_CHANGED", 2, 0);
