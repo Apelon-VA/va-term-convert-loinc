@@ -3,23 +3,24 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>gov.va.oia.terminology.converters</groupId>
-	<artifactId>loinc-econcept</artifactId>
-	<!-- this should be set to ${sourceData.version}-loader-${loader.version} but that doesn't appease the maven gods that know best.... -->
-	<version>2.48-loader-3.3-SNAPSHOT</version>
-	
+	<groupId>gov.vha.isaac.terminology.converters</groupId>
+	<artifactId>term-convert-loinc-econcept</artifactId>
+	<!-- this should be set to ${sourceData.version}-loader-${loader.version} but that doesn't appease the maven gods that know best....
+		will leave it as is for now, and ignore the warnings. -->
+	<version>${sourceData.version}-loader-${loader.version}</version>
 	<packaging>pom</packaging>
+	
 	<name>LOINC eConcept Artifact Generator</name>
 	
 	<properties>
 		<sourceData.version>2.48</sourceData.version>
-		<loader.version>3.3-SNAPSHOT</loader.version>
+		<loader.version>4.0-SNAPSHOT</loader.version>
 		<!-- For no classifier, leave this blank-->
 		<resultArtifactClassifier></resultArtifactClassifier>
 	</properties>
 	
 	<scm>
-		<url>https://csfe.aceworkspace.net/gerrit/gitweb?p=term-convert-loinc.git;tflink=projects.informatics_architecture/scm.term_convert_loinc</url>
+		<url>https://github.com/Apelon-VA/va-term-convert-loinc.git</url>
 	</scm>
 	
 	<licenses>
@@ -46,8 +47,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>gov.va.oia.terminology.converters</groupId>
-			<artifactId>loinc-mojo</artifactId>
+			<groupId>gov.vha.isaac.terminology.converters</groupId>
+			<artifactId>term-convert-loinc-mojo</artifactId>
 			<version>${loader.version}</version>
 			<scope>compile</scope>
 			<optional>true</optional>  <!-- Not needed at runtime -->
@@ -70,7 +71,7 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>gov.va.oia.terminology.source.loinc</groupId>
+									<groupId>gov.va.oia.terminology.source.loinc</groupId>  <!-- TODO this will be wrong with the next release of src data -->
 									<artifactId>loinc-src-data</artifactId>
 									<version>${sourceData.version}</version>
 									<type>zip</type>
@@ -84,7 +85,7 @@
 
 			<plugin>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>loinc-mojo</artifactId>
+				<artifactId>term-convert-loinc-mojo</artifactId>
 				<version>${loader.version}</version>
 				<executions>
 					<execution>
