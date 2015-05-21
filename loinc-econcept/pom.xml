@@ -14,7 +14,7 @@
 	
 	<properties>
 		<sourceData.version>2.48</sourceData.version>
-		<loader.version>4.0</loader.version>
+		<loader.version>4.1-SNAPSHOT</loader.version>
 		<!-- For no classifier, leave this blank-->
 		<resultArtifactClassifier></resultArtifactClassifier>
 	</properties>
