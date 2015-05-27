@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>gov.vha.isaac</groupId>
 		<artifactId>isaac-parent</artifactId>
-		<version>1.7-SNAPSHOT</version>
+		<version>1.6</version>
 	</parent>
 
 	<groupId>gov.vha.isaac.terminology.converters</groupId>
@@ -15,7 +15,7 @@
 	<name>LOINC Converter Mojo</name>
 	
 	<properties>
-		<term-convert-common-base.version>4.1-SNAPSHOT</term-convert-common-base.version>
+		<term-convert-common-base.version>4.1</term-convert-common-base.version>
 	</properties>
 	
 	<scm>
