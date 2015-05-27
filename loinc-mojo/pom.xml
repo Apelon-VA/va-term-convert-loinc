@@ -9,13 +9,13 @@
 
 	<groupId>gov.vha.isaac.terminology.converters</groupId>
 	<artifactId>term-convert-loinc-mojo</artifactId>
-	<version>4.0</version>
+	<version>4.1</version>
 	<packaging>maven-plugin</packaging>
 	
 	<name>LOINC Converter Mojo</name>
 	
 	<properties>
-		<term-convert-common-base.version>4.0</term-convert-common-base.version>
+		<term-convert-common-base.version>4.1</term-convert-common-base.version>
 	</properties>
 	
 	<scm>
