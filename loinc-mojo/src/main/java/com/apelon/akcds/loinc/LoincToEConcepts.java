@@ -241,11 +241,21 @@ public class LoincToEConcepts extends ConverterBaseMojo
 				PropertyType.setSourceVersion(4);
 				mapFileName = "classMappings-2.48.txt";
 			}
+			else if (version.contains("2.50"))
+			{
+				PropertyType.setSourceVersion(5);
+				mapFileName = "classMappings-2.52.txt";  //never did a 2.50, skipped to 2.52
+			}
+			else if (version.contains("2.52"))
+			{
+				PropertyType.setSourceVersion(6);
+				mapFileName = "classMappings-2.52.txt";
+			}
 			else
 			{
 				ConsoleUtil.printErrorln("ERROR: UNTESTED VERSION - NO TESTED PROPERTY MAPPING EXISTS!");
-				PropertyType.setSourceVersion(4);
-				mapFileName = "classMappings-2.48.txt";
+				PropertyType.setSourceVersion(6);
+				mapFileName = "classMappings-2.52.txt";
 			}
 
 			classMapping_ = new NameMap(mapFileName);

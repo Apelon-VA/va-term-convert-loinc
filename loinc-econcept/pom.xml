@@ -13,7 +13,7 @@
 	<name>LOINC eConcept Artifact Generator</name>
 	
 	<properties>
-		<sourceData.version>2.48</sourceData.version>
+		<sourceData.version>2.52</sourceData.version>
 		<loader.version>4.2-SNAPSHOT</loader.version>
 		<!-- For no classifier, leave this blank-->
 		<resultArtifactClassifier></resultArtifactClassifier>
