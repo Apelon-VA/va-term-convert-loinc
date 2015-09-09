@@ -35,10 +35,11 @@ public class PT_Descriptions extends BPT_Descriptions
 
 		addProperty("CONSUMER_NAME", SYNONYM + 1);
 		addProperty("EXACT_CMP_SY", null, null, 0, 1, false, SYNONYM + 1);		//deleted in 2.38
-		addProperty("ACSSYM", SYNONYM + 1);
-		addProperty("BASE_NAME", SYNONYM + 1);
+		addProperty("ACSSYM", null, null, 0, 6, false, SYNONYM + 1);  //deleted in 2.52
+		addProperty("BASE_NAME", null, null, 0, 6, false, SYNONYM + 1);  //deleted in 2.52
 		addProperty("SHORTNAME", SYNONYM);			//typically preferred synonym.
 		addProperty("LONG_COMMON_NAME", FSN);		//this should be the FSN, unless missing, then work down the synonym hierarchy
+		addProperty("DefinitionDescription", null, null, 6, Integer.MAX_VALUE, false, SYNONYM + 5);  //added in 2.52
 		
 		//from multiaxial
 		addProperty("CODE_TEXT", FSN);

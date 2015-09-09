@@ -13,8 +13,8 @@
 	<name>LOINC eConcept Artifact Generator</name>
 	
 	<properties>
-		<sourceData.version>2.48</sourceData.version>
-		<loader.version>4.1</loader.version>
+		<sourceData.version>2.52</sourceData.version>
+		<loader.version>4.2</loader.version>
 		<!-- For no classifier, leave this blank-->
 		<resultArtifactClassifier></resultArtifactClassifier>
 	</properties>
@@ -146,7 +146,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.8</version>
+				<version>1.9.1</version>
 				<executions>
 					<execution>
 						<id>attach-artifact</id>

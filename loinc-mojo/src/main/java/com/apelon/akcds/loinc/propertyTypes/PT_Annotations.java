@@ -35,17 +35,17 @@ public class PT_Annotations extends BPT_Annotations
 		addProperty("DT_LAST_CH", 0, 1);  //replaced with DATE_LAST_CHANGED in 2.38
 		addProperty("DATE_LAST_CHANGED", 2, 0);
 		addProperty("CHNG_TYPE");
-		addProperty("COMMENTS");
+		addProperty("COMMENTS", 0, 6);  //deleted in 2.52
 		addProperty("ANSWERLIST", null, null, 0, 1, true);  	//deleted in 2.38
 		addProperty("SCOPE", null, null, 0, 1, true);			//deleted in 2.38
 		addProperty("IPCC_UNITS", null, null, 0, 1, true);	//deleted in 2.38
 		addProperty("REFERENCE", 0, 1);				//deleted in 2.38
-		addProperty("MOLAR_MASS");
+		addProperty("MOLAR_MASS", 0, 6);  //deleted in 2.52
 		addProperty("CLASSTYPE");
 		addProperty("FORMULA");
 		addProperty("SPECIES");
 		addProperty("EXMPL_ANSWERS");
-		addProperty("CODE_TABLE");
+		addProperty("CODE_TABLE", 0, 6);  //deleted in 2.52
 		addProperty("SETROOT", 0, 1);				//deleted in 2.38
 		addProperty("PANELELEMENTS", null, null, 0, 1, true);	//deleted in 2.38
 		addProperty("SURVEY_QUEST_TEXT");
@@ -58,9 +58,9 @@ public class PT_Annotations extends BPT_Annotations
 		addProperty("EXTERNAL_COPYRIGHT_NOTICE");
 		addProperty("EXAMPLE_UNITS");
 		addProperty("INPC_PERCENTAGE", 0, 1);		//deleted in 2.38
-		addProperty("HL7_V2_DATATYPE");
-		addProperty("HL7_V3_DATATYPE");
-		addProperty("CURATED_RANGE_AND_UNITS");
+		addProperty("HL7_V2_DATATYPE", 0, 6);  //deleted in 2.52
+		addProperty("HL7_V3_DATATYPE", 0, 6);  //deleted in 2.52
+		addProperty("CURATED_RANGE_AND_UNITS", 0, 6); //deleted in 2.52
 		addProperty("DOCUMENT_SECTION");
 		addProperty("DEFINITION_DESCRIPTION_HELP", 0, 1);	//deleted in 2.38
 		addProperty("EXAMPLE_UCUM_UNITS");
@@ -73,7 +73,13 @@ public class PT_Annotations extends BPT_Annotations
 		addProperty("STATUS");
 		addProperty("COMMON_SI_TEST_RANK", 3, 0);				//added in 2.40 (or maybe 2.39, 2.39 is untested - they failed to document it)
 		addProperty("HL7_ATTACHMENT_STRUCTURE", 4, 0);				//added in 2.42 
-		addProperty("NAACCR_ID");  //Moved from ID - turned out it wasn't unique (see loinc_num 42040-6 and 39807-3)
+		addProperty("NAACCR_ID", 0, 4);  //Moved from ID - turned out it wasn't unique (see loinc_num 42040-6 and 39807-3)  //deleted in 2.52
+		addProperty("EXTERNAL_COPYRIGHT_LINK", 5);  //added in 2.50
+		addProperty("UnitsAndRange", 6);  //added in 2.52
+		addProperty("PanelType", 6);  //added in 2.52
+		addProperty("AskAtOrderEntry", 6);  //added in 2.52
+		addProperty("AssociatedObservations", 6);  //added in 2.52
+
 		
 		//moved these two out of the descriptions
 		addProperty("RELAT_NMS", null, null, 0, 1, true);			//deleted in 2.38
