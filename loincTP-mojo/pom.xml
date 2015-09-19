@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.vha.isaac</groupId>
+		<artifactId>isaac-parent</artifactId>
+		<version>1.10-SNAPSHOT</version>
+	</parent>
+
+	<groupId>gov.vha.isaac.terminology.converters</groupId>
+	<artifactId>term-convert-loincTP-mojo</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>maven-plugin</packaging>
+
+	<name>LOINC Tech Preview Converter Mojo</name>
+
+	<properties>
+		<newtons-cradle.version>1.22-SNAPSHOT</newtons-cradle.version>
+		<isaac-mojo.version>1.12-SNAPSHOT</isaac-mojo.version>
+	</properties>
+
+	<scm>
+		<url>https://github.com/Apelon-VA/va-term-convert-loinc.git</url>
+	</scm>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.maven.plugin-tools</groupId>
+			<artifactId>maven-plugin-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>3.3</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>gov.vha.isaac.newtons-cradle.modules</groupId>
+			<artifactId>newtons-cradle</artifactId>
+			<version>${newtons-cradle.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.vha.isaac</groupId>
+			<artifactId>isaac-mojo</artifactId>
+			<version>${isaac-mojo.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>mojo-descriptor</id>
+						<goals>
+							<goal>descriptor</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
