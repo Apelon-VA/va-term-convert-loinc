@@ -17,6 +17,7 @@
 	<properties>
 		<newtons-cradle.version>1.22-SNAPSHOT</newtons-cradle.version>
 		<isaac-mojo.version>1.12-SNAPSHOT</isaac-mojo.version>
+		<logic-expression-tools.version>1.17-SNAPSHOT</logic-expression-tools.version>
 	</properties>
 
 	<scm>
@@ -52,6 +53,11 @@
 			<groupId>gov.vha.isaac</groupId>
 			<artifactId>isaac-mojo</artifactId>
 			<version>${isaac-mojo.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.vha.isaac.logic.modules</groupId>
+			<artifactId>logic-expression-tools</artifactId>
+			<version>${logic-expression-tools.version}</version>
 		</dependency>
 	</dependencies>
 

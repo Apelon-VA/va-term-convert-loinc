@@ -30,21 +30,21 @@ import com.opencsv.CSVReader;
 
 /**
  * 
- * {@link CSVFileReader}
+ * {@link LoincCsvFileReader}
  *
  * Reads the CSV formatted release files of LOINC, and the custom release notes file
  * to extract the date and time information.
  * 
  * @author <a href="mailto:daniel.armbrust.list@gmail.com">Dan Armbrust</a>
  */
-public class CSVFileReader extends LOINCReader
+public class LoincCsvFileReader extends LOINCReader
 {
 	String[] header;
 	CSVReader reader;
 	String version = null;
 	String release = null;
 	
-	public CSVFileReader(File f) throws IOException
+	public LoincCsvFileReader(File f) throws IOException
 	{
 		System.out.println("Using the data file " + f.getAbsolutePath());
 		//Their new format includes the (optional) UTF-8 BOM, which chokes java for stupid legacy reasons.

@@ -51,4 +51,9 @@ public abstract class LOINCReader
 	{
 		return fieldMapInverse_;
 	}
+	
+	public int getPositionForColumn(String col)
+	{
+		return fieldMap_.get(col);
+	}
 }
