@@ -47,7 +47,9 @@ import gov.vha.isaac.ochre.api.logic.LogicalExpressionBuilderService;
 import gov.vha.isaac.ochre.api.task.TimedTask;
 import gov.vha.isaac.ochre.util.UuidT5Generator;
 import gov.vha.isaac.ochre.util.WorkExecutors;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,6 +60,7 @@ import java.util.concurrent.ExecutionException;
 import javafx.util.Pair;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.mahout.math.Arrays;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.jvnet.hk2.annotations.Service;
 import se.liu.imt.mi.snomedct.expression.tools.SNOMEDCTParserUtil;
@@ -93,11 +96,15 @@ public class LoincTPLoaderMojo extends QuasiMojo
 
 	private static final String necessarySctid = "900000000000074008";
 	private static final String sufficientSctid = "900000000000073002";
-
+	private static final String eol = System.getProperty("line.separator");
+	private StatsCounter sc;
+	
+	
 	@Override
 	public void execute() throws MojoExecutionException
 	{
 		getLog().info("LOINC Tech Preview Processing Begins " + new Date().toString());
+		sc = new StatsCounter(log_);
 		
 		TimedTask<Void> task = new LoincWorker();
 		LookupService.getService(WorkExecutors.class).getExecutor().submit(task);
@@ -107,10 +114,6 @@ public class LoincTPLoaderMojo extends QuasiMojo
 		}
 		catch (InterruptedException | ExecutionException e)
 		{
-			if (task.getException() != null && task.getException() instanceof MojoExecutionException)
-			{
-				throw (MojoExecutionException)task.getException();
-			}
 			throw new MojoExecutionException("Failure", e);
 		}
 
@@ -128,6 +131,7 @@ public class LoincTPLoaderMojo extends QuasiMojo
 			updateMessage("Reading Data Files");
 			updateProgress(1, 7);
 			LOINCReader loincData = null;
+			int expLineNumber = 1;
 
 			try
 			{
@@ -180,6 +184,12 @@ public class LoincTPLoaderMojo extends QuasiMojo
 				attributeTypes.put("FORMULA", createConcept("FORMULA", null, "Formula", null, attributesRoot.getConceptSequence()));
 				attributeTypes.put("EXMPL_ANSWERS", createConcept("EXMPL_ANSWERS", null, "Example Answers", null, attributesRoot.getConceptSequence()));
 				attributeTypes.put("RELATEDNAMES2", createConcept("RELATEDNAMES2", null, "Related Names", null, attributesRoot.getConceptSequence()));
+				
+				
+				//Commit metadata
+				Get.commitService().commit("LOINC Metadata Creation commit");
+				
+				sc.metadataDone();
 				
 				//TODO do I need any other attrs right now?
 
@@ -243,13 +253,16 @@ public class LoincTPLoaderMojo extends QuasiMojo
 				 * contentOriginId
 				 */
 				
+				BufferedWriter loincExpressionDebug = new BufferedWriter(new FileWriter(new File(outputDirectory, "ExpressionDebug.log")));
+				loincExpressionDebug.write("line number,expression id,converted expression" + eol);
+
+				
 				getLog().info("Processing Expressions / Creating Concepts");
 				updateMessage("Processing Expressions / Creating Concepts");
 				updateProgress(5, 7);
 				
 				LoincExpressionReader ler = new LoincExpressionReader(zipFile);
 				String[] expressionLine = ler.readLine();
-				int lineCount = 1;
 				while (expressionLine != null)
 				{
 					
@@ -259,13 +272,13 @@ public class LoincTPLoaderMojo extends QuasiMojo
 						
 						if (loincConceptData == null)
 						{
-							getLog().warn("Skipping line " + lineCount + " because I can't find loincNum " + expressionLine[ler.getPositionForColumn("mapTarget")]);
+							getLog().warn("Skipping line " + expLineNumber + " because I can't find loincNum " + expressionLine[ler.getPositionForColumn("mapTarget")]);
 						}
 						
 						boolean active = expressionLine[ler.getPositionForColumn("active")].equals("1");
 						if (!active)
 						{
-							getLog().warn("Skipping line " + lineCount + " because it is inactive");
+							getLog().warn("Skipping line " + expLineNumber + " because it is inactive");
 						}
 						
 						if (active && loincConceptData != null)
@@ -283,7 +296,7 @@ public class LoincTPLoaderMojo extends QuasiMojo
 							}
 							else
 							{
-								throw new RuntimeException("Unexpected definition status: " + definitionSctid + " on line " + lineCount);
+								throw new RuntimeException("Unexpected definition status: " + definitionSctid + " on line " + expLineNumber);
 							}
 	
 							LogicalExpressionBuilder defBuilder = expressionBuilderService.getLogicalExpressionBuilder();
@@ -291,15 +304,24 @@ public class LoincTPLoaderMojo extends QuasiMojo
 							visitor.visit(parseTree);
 							LogicalExpression expression = defBuilder.build();
 							
+							UUID expressionId = UUID.fromString(expressionLine[ler.getPositionForColumn("id")]);
+							
+							loincExpressionDebug.write(expLineNumber + "," + expressionId + "," + expression.toString() + eol);
+							
 							
 							//Build up a concept with the attributes we want, and the expression from the tech preview
 							
-							ConceptBuilder conBuilder = conceptBuilderService.getDefaultConceptBuilder(loincConceptData[loincData.getPositionForColumn("LONG_COMMON_NAME")], 
-									null, null);  //don't put logic in here, can't set the UUID this way
+							String fsn = loincConceptData[loincData.getPositionForColumn("LONG_COMMON_NAME")];
+							if (StringUtils.isBlank(fsn))
+							{
+								throw new RuntimeException("Null FSN from " + Arrays.toString(loincConceptData) + " on line " + expLineNumber);
+							}
+							//don't put logic in here, can't set the UUID this way
+							ConceptBuilder conBuilder = conceptBuilderService.getDefaultConceptBuilder(fsn, null, null); 
 							
 							SememeBuilder<?> logicBuilder = sememeBuilderService.getLogicalExpressionSememeBuilder(expression, 
 									conBuilder, LogicCoordinates.getStandardElProfile().getStatedAssemblageSequence());
-							logicBuilder.setPrimordialUuid(UUID.fromString(expressionLine[ler.getPositionForColumn("id")]));  //expression id
+							logicBuilder.setPrimordialUuid(expressionId);  //expression id
 							conBuilder.addLogicalDefinition(logicBuilder);
 							
 							String loincNum = loincConceptData[loincData.getPositionForColumn("LOINC_NUM")];
@@ -308,6 +330,7 @@ public class LoincTPLoaderMojo extends QuasiMojo
 							ConceptChronology<?> newCon = conBuilder.build(EditCoordinates.getDefaultUserSolorOverlay(), ChangeCheckerMode.ACTIVE, new ArrayList<>());
 							Get.commitService().addUncommitted(newCon);  //TODO is this needed?
 							conCounter++;
+							sc.addConcept();
 							
 							//add descriptions
 							HashMap<String, Pair<ConceptProxy, ConceptProxy>> descCols = new HashMap<>();  //loinc name -> (desc type, desc subtype)
@@ -346,15 +369,19 @@ public class LoincTPLoaderMojo extends QuasiMojo
 					}
 					
 					expressionLine = ler.readLine();
-					lineCount++;
+					expLineNumber++;
 				}
+				
+				loincExpressionDebug.close();
 
 				getLog().info("Created " + conCounter + " concepts total");
 				
 				getLog().info("Committing");
 				updateMessage("Committing");
 				updateProgress(6, 7);
-				Get.commitService().commit(EditCoordinates.getDefaultUserSolorOverlay(), "LOINC Creation commit");
+				Get.commitService().commit("LOINC Creation commit");
+				
+				sc.printStats();
 				
 				getLog().info("Finished");
 				updateMessage("Finished");
@@ -364,6 +391,7 @@ public class LoincTPLoaderMojo extends QuasiMojo
 
 			catch (Exception ex)
 			{
+				log_.error("Failed with expression line number at " + expLineNumber);
 				throw new MojoExecutionException(ex.getLocalizedMessage(), ex);
 			}
 			finally
@@ -428,6 +456,7 @@ public class LoincTPLoaderMojo extends QuasiMojo
 
 		ConceptChronology<?> newCon = builder.build(EditCoordinates.getDefaultUserSolorOverlay(), ChangeCheckerMode.ACTIVE, new ArrayList<>());
 		Get.commitService().addUncommitted(newCon);  //TODO is this needed?
+		sc.addConcept();
 		return newCon;
 	}
 	
@@ -460,6 +489,7 @@ public class LoincTPLoaderMojo extends QuasiMojo
 					ChangeCheckerMode.ACTIVE);
 		}
 		
+		sc.addDescription(descriptionType.getConceptSequence());
 		return db.build(EditCoordinates.getDefaultUserSolorOverlay(), ChangeCheckerMode.ACTIVE);
 	}
 	
@@ -470,8 +500,8 @@ public class LoincTPLoaderMojo extends QuasiMojo
 		{
 			sb.setPrimordialUuid(uuid);
 		}
+		sc.addAttribute(assemblageConceptSequence);
 		return sb.build(EditCoordinates.getDefaultUserSolorOverlay(), ChangeCheckerMode.ACTIVE);
-		
 	}
 	
 	private UUID makeNamespaceUUID(String value)
