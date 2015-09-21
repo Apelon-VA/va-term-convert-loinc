@@ -33,7 +33,7 @@ public class LoincExpressionReader
 		while (entries.hasMoreElements())
 		{
 			ZipEntry ze = entries.nextElement();
-			if (ze.getName().toLowerCase().contains("xder2_sscccRefset_LOINCExpressionAssociationFull"))
+			if (ze.getName().toLowerCase().contains("xder2_sscccRefset_LOINCExpressionAssociationFull".toLowerCase()))
 			{
 				found = true;
 				init(zip.getInputStream(ze));
@@ -54,7 +54,7 @@ public class LoincExpressionReader
 	
 	private void init(InputStream is) throws IOException
 	{
-		reader = new CSVReader(new BufferedReader(new InputStreamReader(new BOMInputStream(is))));
+		reader = new CSVReader(new BufferedReader(new InputStreamReader(new BOMInputStream(is))), '\t');
 		header = readLine();
 	}
 	
