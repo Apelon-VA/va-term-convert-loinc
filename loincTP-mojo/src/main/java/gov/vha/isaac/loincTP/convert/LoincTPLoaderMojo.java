@@ -22,7 +22,6 @@ import static gov.vha.isaac.ochre.api.logic.LogicalExpressionBuilder.And;
 import static gov.vha.isaac.ochre.api.logic.LogicalExpressionBuilder.ConceptAssertion;
 import static gov.vha.isaac.ochre.api.logic.LogicalExpressionBuilder.NecessarySet;
 import gov.vha.isaac.expression.parser.ISAACVisitor;
-import gov.vha.isaac.metadata.coordinates.EditCoordinates;
 import gov.vha.isaac.metadata.coordinates.LogicCoordinates;
 import gov.vha.isaac.metadata.source.IsaacMetadataAuxiliaryBinding;
 import gov.vha.isaac.mojo.external.QuasiMojo;
@@ -41,10 +40,12 @@ import gov.vha.isaac.ochre.api.component.sememe.SememeBuilder;
 import gov.vha.isaac.ochre.api.component.sememe.SememeBuilderService;
 import gov.vha.isaac.ochre.api.component.sememe.SememeChronology;
 import gov.vha.isaac.ochre.api.component.sememe.version.MutableDescriptionSememe;
+import gov.vha.isaac.ochre.api.coordinate.EditCoordinate;
 import gov.vha.isaac.ochre.api.logic.LogicalExpression;
 import gov.vha.isaac.ochre.api.logic.LogicalExpressionBuilder;
 import gov.vha.isaac.ochre.api.logic.LogicalExpressionBuilderService;
 import gov.vha.isaac.ochre.api.task.TimedTask;
+import gov.vha.isaac.ochre.model.coordinate.EditCoordinateImpl;
 import gov.vha.isaac.ochre.util.UuidT5Generator;
 import gov.vha.isaac.ochre.util.WorkExecutors;
 import java.io.BufferedWriter;
@@ -98,6 +99,8 @@ public class LoincTPLoaderMojo extends QuasiMojo
 	private static final String sufficientSctid = "900000000000073002";
 	private static final String eol = System.getProperty("line.separator");
 	private StatsCounter sc;
+	private EditCoordinate ec;
+	private int allLoincConceptsSequence;
 	
 	
 	@Override
@@ -163,6 +166,10 @@ public class LoincTPLoaderMojo extends QuasiMojo
 
 				String version = loincData.getVersion();
 				
+				ec = new EditCoordinateImpl(Get.identifierService().getNidForUuids(IsaacMetadataAuxiliaryBinding.USER.getPrimodialUuid()), 
+						Get.identifierService().getNidForUuids(IsaacMetadataAuxiliaryBinding.LOINC.getPrimodialUuid()),
+						Get.identifierService().getNidForUuids(IsaacMetadataAuxiliaryBinding.DEVELOPMENT.getPrimodialUuid()));
+				
 				init();
 
 				getLog().info("Loading Metadata");
@@ -176,6 +183,10 @@ public class LoincTPLoaderMojo extends QuasiMojo
 				createSememeStringAnnotation(loincData.getReleaseDate(), null, metadataRoot.getNid(), IsaacMetadataAuxiliaryBinding.CONTENT_RELEASE_DATE.getConceptSequence());
 				createSememeStringAnnotation(loaderVersion, null, metadataRoot.getNid(), IsaacMetadataAuxiliaryBinding.LOADER_VERSION.getConceptSequence());
 				createSememeStringAnnotation(projectVersion, null, metadataRoot.getNid(), IsaacMetadataAuxiliaryBinding.ARTIFACT_VERSION.getConceptSequence());
+				
+				ConceptChronology<?> refsetsRoot = createConcept("Refsets", "ISAAC", "Refsets", null, 
+						metadataRoot.getConceptSequence());
+				allLoincConceptsSequence = createConcept("All LOINC Concepts", null, "All LOINC Concepts", null, refsetsRoot.getConceptSequence()).getConceptSequence();
 
 				ConceptChronology<?> attributesRoot = createConcept("Attribute Types", "ISAAC", "Attribute Types", null, 
 						metadataRoot.getConceptSequence());
@@ -327,10 +338,12 @@ public class LoincTPLoaderMojo extends QuasiMojo
 							String loincNum = loincConceptData[loincData.getPositionForColumn("LOINC_NUM")];
 							conBuilder.setPrimordialUuid(makeNamespaceUUID(loincNum));  //Concept UUID
 	
-							ConceptChronology<?> newCon = conBuilder.build(EditCoordinates.getDefaultUserSolorOverlay(), ChangeCheckerMode.ACTIVE, new ArrayList<>());
-							Get.commitService().addUncommitted(newCon);  //TODO is this needed?
+							ConceptChronology<?> newCon = conBuilder.build(ec, ChangeCheckerMode.ACTIVE, new ArrayList<>());
+							Get.commitService().addUncommitted(newCon);  //TODO is this needed?  If I take it out, things really break.
 							conCounter++;
 							sc.addConcept();
+							
+							createSememeMembershipAnnotation(null, newCon.getNid(), allLoincConceptsSequence);
 							
 							//add descriptions
 							HashMap<String, Pair<ConceptProxy, ConceptProxy>> descCols = new HashMap<>();  //loinc name -> (desc type, desc subtype)
@@ -454,8 +467,8 @@ public class LoincTPLoaderMojo extends QuasiMojo
 		definitionBuilder.setPreferredInDialectAssemblage(IsaacMetadataAuxiliaryBinding.US_ENGLISH_DIALECT);
 		builder.addDescription(definitionBuilder);
 
-		ConceptChronology<?> newCon = builder.build(EditCoordinates.getDefaultUserSolorOverlay(), ChangeCheckerMode.ACTIVE, new ArrayList<>());
-		Get.commitService().addUncommitted(newCon);  //TODO is this needed?
+		ConceptChronology<?> newCon = builder.build(ec, ChangeCheckerMode.ACTIVE, new ArrayList<>());
+		Get.commitService().addUncommitted(newCon);  //TODO is this needed?  If I take it out, things really break.
 		sc.addConcept();
 		return newCon;
 	}
@@ -481,16 +494,16 @@ public class LoincTPLoaderMojo extends QuasiMojo
 
 		sememeBuilderService.getComponentSememeBuilder((preferred ? IsaacMetadataAuxiliaryBinding.PREFERRED.getNid() : IsaacMetadataAuxiliaryBinding.ACCEPTABLE.getNid()),
 				db, IsaacMetadataAuxiliaryBinding.US_ENGLISH_DIALECT.getConceptSequence())
-				.build(EditCoordinates.getDefaultUserSolorOverlay(), ChangeCheckerMode.ACTIVE);
+				.build(ec, ChangeCheckerMode.ACTIVE);
 
 		if (subDescriptionType != null)
 		{
-			sememeBuilderService.getMembershipSememeBuilder(db, subDescriptionType.getConceptSequence()).build(EditCoordinates.getDefaultUserSolorOverlay(),
+			sememeBuilderService.getMembershipSememeBuilder(db, subDescriptionType.getConceptSequence()).build(ec,
 					ChangeCheckerMode.ACTIVE);
 		}
 		
 		sc.addDescription(descriptionType.getConceptSequence());
-		return db.build(EditCoordinates.getDefaultUserSolorOverlay(), ChangeCheckerMode.ACTIVE);
+		return db.build(ec, ChangeCheckerMode.ACTIVE);
 	}
 	
 	private IdentifiedObjectLocal createSememeStringAnnotation(String value, UUID uuid, int referencedComponentToAnnotate, int assemblageConceptSequence)
@@ -501,7 +514,18 @@ public class LoincTPLoaderMojo extends QuasiMojo
 			sb.setPrimordialUuid(uuid);
 		}
 		sc.addAttribute(assemblageConceptSequence);
-		return sb.build(EditCoordinates.getDefaultUserSolorOverlay(), ChangeCheckerMode.ACTIVE);
+		return sb.build(ec, ChangeCheckerMode.ACTIVE);
+	}
+	
+	private IdentifiedObjectLocal createSememeMembershipAnnotation(UUID uuid, int referencedComponentToAnnotate, int assemblageConceptSequence)
+	{
+		SememeBuilder<?> sb = sememeBuilderService.getMembershipSememeBuilder(referencedComponentToAnnotate, assemblageConceptSequence);
+		if (uuid != null)
+		{
+			sb.setPrimordialUuid(uuid);
+		}
+		sc.addAttribute(assemblageConceptSequence);
+		return sb.build(ec, ChangeCheckerMode.ACTIVE);
 	}
 	
 	private UUID makeNamespaceUUID(String value)
