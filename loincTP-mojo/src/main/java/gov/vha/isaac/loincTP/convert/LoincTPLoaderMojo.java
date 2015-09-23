@@ -276,6 +276,11 @@ public class LoincTPLoaderMojo extends QuasiMojo
 				String[] expressionLine = ler.readLine();
 				while (expressionLine != null)
 				{
+					//TODO remove this!  Disable expression processing for now
+					if (1 == 1)
+					{
+						break;
+					}
 					
 					if (expressionLine.length > 0)
 					{
@@ -392,7 +397,10 @@ public class LoincTPLoaderMojo extends QuasiMojo
 				getLog().info("Committing");
 				updateMessage("Committing");
 				updateProgress(6, 7);
-				Get.commitService().commit("LOINC Creation commit");
+				Get.commitService().commit("LOINC Creation commit").get();
+				
+				//TODO remove this debug line
+				Get.sememeService().getSememesForComponent(metadataRoot.getNid()).forEach(foo -> System.out.println(foo));
 				
 				sc.printStats();
 				
@@ -467,7 +475,16 @@ public class LoincTPLoaderMojo extends QuasiMojo
 		definitionBuilder.setPreferredInDialectAssemblage(IsaacMetadataAuxiliaryBinding.US_ENGLISH_DIALECT);
 		builder.addDescription(definitionBuilder);
 
-		ConceptChronology<?> newCon = builder.build(ec, ChangeCheckerMode.ACTIVE, new ArrayList<>());
+		ArrayList<?> built = new ArrayList<>(); 
+		ConceptChronology<?> newCon = builder.build(ec, ChangeCheckerMode.ACTIVE, built);
+		
+		//TODO remove this debug line
+		System.out.println("--------------------#########################3-----------------");
+		for (Object x : built)
+		{
+			System.out.println(x);
+		}
+		
 		Get.commitService().addUncommitted(newCon);  //TODO is this needed?  If I take it out, things really break.
 		sc.addConcept();
 		return newCon;
