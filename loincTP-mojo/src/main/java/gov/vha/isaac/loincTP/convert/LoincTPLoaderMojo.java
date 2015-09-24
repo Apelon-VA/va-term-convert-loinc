@@ -276,12 +276,6 @@ public class LoincTPLoaderMojo extends QuasiMojo
 				String[] expressionLine = ler.readLine();
 				while (expressionLine != null)
 				{
-					//TODO remove this!  Disable expression processing for now
-					if (1 == 1)
-					{
-						break;
-					}
-					
 					if (expressionLine.length > 0)
 					{
 						String[] loincConceptData = loincNumToData.get(expressionLine[ler.getPositionForColumn("mapTarget")]);
@@ -344,7 +338,6 @@ public class LoincTPLoaderMojo extends QuasiMojo
 							conBuilder.setPrimordialUuid(makeNamespaceUUID(loincNum));  //Concept UUID
 	
 							ConceptChronology<?> newCon = conBuilder.build(ec, ChangeCheckerMode.ACTIVE, new ArrayList<>());
-							Get.commitService().addUncommitted(newCon);  //TODO is this needed?  If I take it out, things really break.
 							conCounter++;
 							sc.addConcept();
 							
@@ -398,9 +391,6 @@ public class LoincTPLoaderMojo extends QuasiMojo
 				updateMessage("Committing");
 				updateProgress(6, 7);
 				Get.commitService().commit("LOINC Creation commit").get();
-				
-				//TODO remove this debug line
-				Get.sememeService().getSememesForComponent(metadataRoot.getNid()).forEach(foo -> System.out.println(foo));
 				
 				sc.printStats();
 				
@@ -478,14 +468,6 @@ public class LoincTPLoaderMojo extends QuasiMojo
 		ArrayList<?> built = new ArrayList<>(); 
 		ConceptChronology<?> newCon = builder.build(ec, ChangeCheckerMode.ACTIVE, built);
 		
-		//TODO remove this debug line
-		System.out.println("--------------------#########################3-----------------");
-		for (Object x : built)
-		{
-			System.out.println(x);
-		}
-		
-		Get.commitService().addUncommitted(newCon);  //TODO is this needed?  If I take it out, things really break.
 		sc.addConcept();
 		return newCon;
 	}
