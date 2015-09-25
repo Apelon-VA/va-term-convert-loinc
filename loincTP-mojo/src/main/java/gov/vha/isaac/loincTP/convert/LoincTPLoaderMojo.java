@@ -68,7 +68,7 @@ import se.liu.imt.mi.snomedct.expression.tools.SNOMEDCTParserUtil;
 
 /**
  * 
- * Loader code to convert Loinc into the workbench.
+ * Loader code to convert Loinc into the ISAAC datastore.
  * 
  * Paths are typically controlled by maven, however, the main() method has paths configured so that they
  * match what maven does for test purposes.
