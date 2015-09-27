@@ -2,6 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+<!-- Note that this project is just a debug / test project for building a DB that contains SCT and the LOINC test preview.
+
+The _actual_ execution for loading the LOINC tech preview in in the va-solor-goods project.
+ -->
+
 	<groupId>gov.vha.isaac.terminology.converters</groupId>
 	<artifactId>term-convert-loincTP-econcept</artifactId>
 	<!-- this should be set to ${loincTP.version}-loader-${loader.version} but that doesn't appease the maven gods that know best....
@@ -14,12 +19,12 @@
 	<properties>
 		<loincTP.version>2015.08</loincTP.version>
 		<loinc.version>2.52</loinc.version>
-		<loader.version>1.0-SNAPSHOT</loader.version>
-		<sct.version>20150731-loader-2.1</sct.version>
-		<isaac-mojo.version>1.12-SNAPSHOT</isaac-mojo.version>
-		<isaac-metadata.version>1.36-SNAPSHOT</isaac-metadata.version>
-		<query.version>2.17-SNAPSHOT</query.version>
-		<logic.version>1.17-SNAPSHOT</logic.version>
+		<loader.version>1.0</loader.version>
+		<sct.version>20150731-loader-2.2</sct.version>
+		<isaac-mojo.version>1.12</isaac-mojo.version>
+		<isaac-metadata.version>1.36</isaac-metadata.version>
+		<query.version>2.17</query.version>
+		<logic.version>1.17</logic.version>
 	</properties>
 
 	<scm>
