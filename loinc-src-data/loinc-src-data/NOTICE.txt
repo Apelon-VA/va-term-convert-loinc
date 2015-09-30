@@ -1,0 +1,51 @@
+LOINC Source Packager
+
+Copyright Notice
+This is a work of the U.S. Government and is not subject to copyright
+protection in the United States. Foreign copyrights may apply.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+==========================================================================
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+==========================================================================
+
+This product includes all or a portion of the LOINC(r) table, LOINC
+panels and forms file, LOINC document ontology file, and/or LOINC
+hierarchies file, or is derived from one or more of the foregoing,
+subject to a license from Regenstrief Institute, Inc. Your use of the
+LOINC table, LOINC codes, LOINC panels and forms file, LOINC document
+ontology file, and LOINC hierarchies file also is subject to this
+license, a copy of which is available at http://loinc.org/terms-of-use.
+The current complete LOINC table, LOINC Users' Guide, LOINC panels and
+forms file, LOINC document ontology file, and LOINC hierarchies file
+are available for download at http://loinc.org. The LOINC table and
+LOINC codes are copyright (c) 1995-2014, Regenstrief Institute, Inc.
+and the Logical Observation Identifiers Names and Codes (LOINC)
+Committee. The LOINC panels and forms file, LOINC document ontology
+file, and LOINC hierarchies file are copyright (c) 1995-2014,
+Regenstrief Institute, Inc. All rights reserved. THE LOINC TABLE
+(IN ALL FORMATS), LOINC PANELS AND FORMS FILE, LOINC DOCUMENT
+ONTOLOGY FILE, AND LOINC HIERARCHIES ARE PROVIDED "AS IS."  ANY
+EXPRESS OR IMPLIED WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED
+TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE. LOINC(r) is a registered United States trademark
+of Regenstrief Institute, Inc. A small portion of the LOINC table may
+include content (e.g., survey instruments) that is subject to copyrights
+owned by third parties. Such content has been mapped to LOINC terms under
+applicable copyright and terms of use. Notice of such third party
+copyright and license terms would need to be included if such content
+is included.
