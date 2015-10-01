@@ -8,7 +8,7 @@ The _actual_ execution for loading the LOINC tech preview in in the va-solor-goo
  -->
 
 	<groupId>gov.vha.isaac.terminology.converters</groupId>
-	<artifactId>term-convert-loincTP-econcept</artifactId>
+	<artifactId>term-convert-loincTP-db</artifactId>
 	<!-- this should be set to ${loincTP.version}-loader-${loader.version} but that doesn't appease the maven gods that know best....
 		will leave it as is for now, and ignore the warnings. -->
 	<version>${loincTP.version}-loader-${loader.version}</version>
@@ -19,12 +19,12 @@ The _actual_ execution for loading the LOINC tech preview in in the va-solor-goo
 	<properties>
 		<loincTP.version>2015.08</loincTP.version>
 		<loinc.version>2.52</loinc.version>
-		<loader.version>1.0</loader.version>
+		<loader.version>1.1</loader.version>
 		<sct.version>20150731-loader-2.2</sct.version>
-		<isaac-mojo.version>1.12</isaac-mojo.version>
-		<isaac-metadata.version>1.36</isaac-metadata.version>
-		<query.version>2.17</query.version>
-		<logic.version>1.17</logic.version>
+		<isaac-mojo.version>1.13</isaac-mojo.version>
+		<isaac-metadata.version>1.37</isaac-metadata.version>
+		<query.version>2.18</query.version>
+		<logic.version>1.18</logic.version>
 	</properties>
 
 	<scm>

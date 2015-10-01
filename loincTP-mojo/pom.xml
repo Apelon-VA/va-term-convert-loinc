@@ -9,15 +9,15 @@
 
 	<groupId>gov.vha.isaac.terminology.converters</groupId>
 	<artifactId>term-convert-loincTP-mojo</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>LOINC Tech Preview Converter Mojo</name>
 
 	<properties>
-		<newtons-cradle.version>1.22</newtons-cradle.version>
-		<isaac-mojo.version>1.12</isaac-mojo.version>
-		<logic-expression-tools.version>1.17</logic-expression-tools.version>
+		<newtons-cradle.version>1.24</newtons-cradle.version>
+		<isaac-mojo.version>1.13</isaac-mojo.version>
+		<logic-expression-tools.version>1.18</logic-expression-tools.version>
 	</properties>
 
 	<scm>
