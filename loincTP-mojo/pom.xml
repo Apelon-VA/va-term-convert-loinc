@@ -9,7 +9,7 @@
 
 	<groupId>gov.vha.isaac.terminology.converters</groupId>
 	<artifactId>term-convert-loincTP-mojo</artifactId>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.1</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>LOINC Tech Preview Converter Mojo</name>
