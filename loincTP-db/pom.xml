@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	<parent>
+		<groupId>gov.vha.isaac.terminology.converters</groupId>
+		<artifactId>term-convert-loincTP</artifactId>
+		<version>Test-to-build-2.0-SNAPSHOT</version>
+	</parent>
 <!-- Note that this project is just a debug / test project for building a DB that contains SCT and the LOINC test preview.
 
 The _actual_ execution for loading the LOINC tech preview in in the va-solor-goods project.
  -->
 
-	<groupId>gov.vha.isaac.terminology.converters</groupId>
-	<artifactId>term-convert-loincTP-db</artifactId>
+<!--	<groupId>gov.vha.isaac.terminology.converters</groupId> -->
+	<artifactId>loincTP-db</artifactId> 
+<!--	<artifactId>term-convert-loincTP-db</artifactId> -->
 	<!-- this should be set to ${loincTP.version}-loader-${loader.version} but that doesn't appease the maven gods that know best....
 		will leave it as is for now, and ignore the warnings. -->
-	<version>${loincTP.version}-loader-${loader.version}</version>
+<!--	<version>${loincTP.version}-loader-${loader.version}</version> -->
 	<packaging>pom</packaging>
 
 	<name>LOINC Tech Preview Database Generator</name>
 
-	<properties>
+<!--	<properties>
 		<loincTP.version>2015.08</loincTP.version>
 		<loinc.version>2.52</loinc.version>
 		<loader.version>1.2-SNAPSHOT</loader.version>
@@ -25,7 +30,7 @@ The _actual_ execution for loading the LOINC tech preview in in the va-solor-goo
 		<isaac-metadata.version>1.38-SNAPSHOT</isaac-metadata.version>
 		<query.version>2.19-SNAPSHOT</query.version>
 		<logic.version>1.19-SNAPSHOT</logic.version>
-	</properties>
+	</properties> -->
 
 	<scm>
 		<url>https://github.com/Apelon-VA/va-term-convert-loinc.git</url>
@@ -159,7 +164,7 @@ The _actual_ execution for loading the LOINC tech preview in in the va-solor-goo
 					<dependency>
 						<groupId>gov.vha.isaac.logic.modules</groupId>
 						<artifactId>logic</artifactId>
-						<version>${logic.version}</version>
+						<version>${logic-expression-tools.version}</version>
 						<optional>true</optional>
 					</dependency>
 					<dependency>

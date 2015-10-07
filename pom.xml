@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>gov.vha.isaac</groupId>
+		<artifactId>isaac-parent</artifactId>
+		<version>1.11-SNAPSHOT</version>
+	</parent>
+	
+	<groupId>gov.vha.isaac.terminology.converters</groupId>
+	<artifactId>term-convert-loincTP</artifactId>
+	<version>Test-to-build-2.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	
+	<name>LOINC Tech Preview Database G</name>
+	
+	<properties>
+		<newtons-cradle.version>1.25-SNAPSHOT</newtons-cradle.version>
+		<loincTP.version>2015.08</loincTP.version>
+		<loinc.version>2.52</loinc.version>
+		<loader.version>1.0</loader.version>
+		<sct.version>20150731-loader-2.2</sct.version>
+		<isaac-mojo.version>1.12</isaac-mojo.version>
+		<isaac-metadata.version>1.36</isaac-metadata.version>
+		<query.version>2.17</query.version>
+		<logic-expression-tools.version>1.17</logic-expression-tools.version>
+	</properties>
+	
+	<scm>
+		<url>https://github.com/Apelon-VA/va-term-convert-loinc.git</url>
+	</scm>
+	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>Copyright Notice
+				This is a work of the U.S. Government and is not subject to copyright
+				protection in the United States. Foreign copyrights may apply.
+			</comments>
+		</license>
+		<license>
+			<name>LOINC License</name>
+			<url>https://loinc.org/terms-of-use</url>
+			<comments>The LOINC content packaged by this module is governed by the LOINC license</comments>
+		</license>
+		<license>
+			<name>SNOMED CT affiliate license agreement</name>
+			<url>https://uts.nlm.nih.gov/help/license/LicenseAgreement.pdf</url>
+			<comments>The SNOMED CT content packaged by this module is governed by the SNOMED CT affiliate license agreement</comments>
+		</license>
+	</licenses>
+	
+	<organization>
+		<name>U.S. Department of Veterans Affairs</name>
+		<url>www.va.gov</url>
+	</organization>
+
+	<dependencies>
+		
+	</dependencies>
+	
+	<profiles>
+		<!-- Nothing to do here, just in sub-modules. Listed here for documentation purposes -->
+		<profile>
+			<id>loincTP-econcept-profile</id>
+			<build></build>
+		</profile>
+		<profile>
+			<id>loincTP-mojo-profile</id>
+			<build></build>
+		</profile>
+		<profile>
+			<id>loincTP-data-profile</id>
+			<build></build>
+		</profile>
+	</profiles>
+	<modules>
+		<module>loincTP-db</module>
+		<module>loincTP-mojo</module>
+<!--		<module>loincTP-src-data</module> -->
+	</modules>
+</project>
